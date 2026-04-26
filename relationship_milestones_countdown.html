@@ -1,0 +1,171 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .wrap { padding: 1.5rem 1rem 2rem; max-width: 600px; margin: 0 auto; font-family: var(--font-sans); }
+  .since-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 1.75rem; padding: 1rem 1.25rem; background: var(--color-background-secondary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); }
+  .since-heart { width: 36px; height: 36px; border-radius: 50%; background: #FBEAF0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .since-heart svg { width: 18px; height: 18px; fill: #D4537E; }
+  .since-label { font-size: 12px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.1em; }
+  .since-val { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-top: 1px; }
+  .since-days { margin-left: auto; text-align: right; }
+  .since-days .big { font-size: 22px; font-weight: 500; color: #D4537E; }
+  .since-days .sml { font-size: 11px; color: var(--color-text-secondary); }
+
+  .progress-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; padding: 0 0.25rem; overflow-x: auto; }
+  .prog-dot { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
+  .prog-dot .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--color-border-secondary); transition: background 0.3s; }
+  .prog-dot.done .dot { background: #D4537E; }
+  .prog-dot.next .dot { background: #D4537E; box-shadow: 0 0 0 3px #FBEAF0; }
+  .prog-dot .dlabel { font-size: 10px; color: var(--color-text-tertiary); white-space: nowrap; }
+  .prog-dot.done .dlabel, .prog-dot.next .dlabel { color: #D4537E; }
+  .prog-line { flex: 1; height: 1px; background: var(--color-border-tertiary); min-width: 12px; }
+  .prog-line.done { background: #D4537E; }
+
+  .milestone-grid { display: flex; flex-direction: column; gap: 10px; }
+  .m-card { border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); padding: 1rem 1.25rem; background: var(--color-background-primary); display: flex; align-items: center; gap: 14px; transition: border-color 0.2s; }
+  .m-card.past { opacity: 0.55; }
+  .m-card.next-up { border: 1.5px solid #D4537E; background: var(--color-background-primary); }
+  .m-badge { width: 42px; height: 42px; border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
+  .m-badge.pink { background: #FBEAF0; }
+  .m-badge.done-bg { background: var(--color-background-secondary); }
+  .m-info { flex: 1; min-width: 0; }
+  .m-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+  .m-date { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+  .m-right { text-align: right; flex-shrink: 0; }
+  .m-days-big { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+  .m-days-big.pink { color: #D4537E; }
+  .m-days-label { font-size: 11px; color: var(--color-text-secondary); }
+  .m-done-tag { font-size: 11px; color: #3B6D11; background: #EAF3DE; padding: 3px 8px; border-radius: 20px; font-weight: 500; }
+  .live-row { display: flex; gap: 6px; margin-top: 6px; }
+  .live-unit { background: var(--color-background-secondary); border-radius: 6px; padding: 3px 7px; text-align: center; }
+  .live-num { font-size: 15px; font-weight: 500; color: #D4537E; display: block; line-height: 1.2; }
+  .live-lbl { font-size: 9px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; }
+  .next-label { font-size: 11px; color: #D4537E; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Relationship milestones countdown from March 13, 2026</h2>
+
+  <div class="since-bar">
+    <div class="since-heart">
+      <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+    </div>
+    <div>
+      <div class="since-label">started</div>
+      <div class="since-val">March 13, 2026</div>
+    </div>
+    <div class="since-days">
+      <div class="big" id="days-since">0</div>
+      <div class="sml">days together</div>
+    </div>
+  </div>
+
+  <div class="progress-row" id="prog-row"></div>
+
+  <div class="milestone-grid" id="milestone-grid"></div>
+</div>
+
+<script>
+const START = new Date('2026-03-13T00:00:00');
+
+const milestones = [
+  { label: '2 months', short: '2m', date: new Date('2026-05-13T00:00:00'), emoji: '2' },
+  { label: '3 months', short: '3m', date: new Date('2026-06-13T00:00:00'), emoji: '3' },
+  { label: '6 months', short: '6m', date: new Date('2026-09-13T00:00:00'), emoji: '6' },
+  { label: '1 year',   short: '1yr', date: new Date('2027-03-13T00:00:00'), emoji: '1' },
+  { label: '2 years',  short: '2yr', date: new Date('2028-03-13T00:00:00'), emoji: '2' },
+];
+
+const emojis = ['🌷','🌙','✨','💌','🎂'];
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function fmtDate(d){ return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); }
+
+function render(){
+  const now = new Date();
+  const daysSince = Math.floor((now - START) / 86400000);
+  document.getElementById('days-since').textContent = daysSince < 0 ? 0 : daysSince;
+
+  let nextIdx = milestones.findIndex(m => now < m.date);
+
+  const progRow = document.getElementById('prog-row');
+  progRow.innerHTML = '';
+  milestones.forEach((m, i) => {
+    const isPast = now >= m.date;
+    const isNext = i === nextIdx;
+    const dot = document.createElement('div');
+    dot.className = 'prog-dot' + (isPast ? ' done' : isNext ? ' next' : '');
+    dot.innerHTML = `<div class="dot"></div><div class="dlabel">${m.short}</div>`;
+    progRow.appendChild(dot);
+    if(i < milestones.length - 1){
+      const line = document.createElement('div');
+      line.className = 'prog-line' + (isPast ? ' done' : '');
+      progRow.appendChild(line);
+    }
+  });
+
+  const grid = document.getElementById('milestone-grid');
+  grid.innerHTML = '';
+  milestones.forEach((m, i) => {
+    const isPast = now >= m.date;
+    const isNext = i === nextIdx;
+    const diff = m.date - now;
+    const days = Math.floor(diff / 86400000);
+    const hrs  = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+
+    const card = document.createElement('div');
+    card.className = 'm-card' + (isPast ? ' past' : isNext ? ' next-up' : '');
+    card.id = 'card-' + i;
+
+    let rightHTML = '';
+    if(isPast){
+      rightHTML = `<div class="m-done-tag">celebrated</div>`;
+    } else if(isNext){
+      rightHTML = `
+        <div class="live-row" id="live-${i}">
+          <div class="live-unit"><span class="live-num" id="ld">${pad(days)}</span><span class="live-lbl">days</span></div>
+          <div class="live-unit"><span class="live-num" id="lh">${pad(hrs)}</span><span class="live-lbl">hrs</span></div>
+          <div class="live-unit"><span class="live-num" id="lm">${pad(mins)}</span><span class="live-lbl">min</span></div>
+          <div class="live-unit"><span class="live-num" id="ls">${pad(secs)}</span><span class="live-lbl">sec</span></div>
+        </div>`;
+    } else {
+      rightHTML = `<div class="m-days-big">${days}</div><div class="m-days-label">days away</div>`;
+    }
+
+    card.innerHTML = `
+      <div class="m-badge ${isPast ? 'done-bg' : 'pink'}">${emojis[i]}</div>
+      <div class="m-info">
+        ${isNext ? '<div class="next-label">up next</div>' : ''}
+        <div class="m-title">${m.label}</div>
+        <div class="m-date">${fmtDate(m.date)}</div>
+      </div>
+      <div class="m-right">${rightHTML}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+render();
+
+setInterval(()=>{
+  const now = new Date();
+  const nextIdx = milestones.findIndex(m => now < m.date);
+  if(nextIdx === -1) return;
+  const m = milestones[nextIdx];
+  const diff = m.date - now;
+  if(diff <= 0){ render(); return; }
+  const card = document.getElementById('card-' + nextIdx);
+  if(!card) return;
+  const ld = card.querySelector('#ld');
+  const lh = card.querySelector('#lh');
+  const lm = card.querySelector('#lm');
+  const ls = card.querySelector('#ls');
+  if(ld) ld.textContent = pad(Math.floor(diff/86400000));
+  if(lh) lh.textContent = pad(Math.floor((diff%86400000)/3600000));
+  if(lm) lm.textContent = pad(Math.floor((diff%3600000)/60000));
+  if(ls) ls.textContent = pad(Math.floor((diff%60000)/1000));
+
+  document.getElementById('days-since').textContent = Math.floor((now - START)/86400000);
+}, 1000);
+</script>
