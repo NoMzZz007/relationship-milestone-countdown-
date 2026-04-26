@@ -1,50 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>for you ♡</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  .wrap { padding: 1.5rem 1rem 2rem; max-width: 600px; margin: 0 auto; font-family: var(--font-sans); }
-  .since-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 1.75rem; padding: 1rem 1.25rem; background: var(--color-background-secondary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); }
-  .since-heart { width: 36px; height: 36px; border-radius: 50%; background: #FBEAF0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .since-heart svg { width: 18px; height: 18px; fill: #D4537E; }
-  .since-label { font-size: 12px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.1em; }
-  .since-val { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-top: 1px; }
-  .since-days { margin-left: auto; text-align: right; }
-  .since-days .big { font-size: 22px; font-weight: 500; color: #D4537E; }
-  .since-days .sml { font-size: 11px; color: var(--color-text-secondary); }
+    :root {
+      --bg:       #fff0f3;
+      --bg2:      #ffe4ea;
+      --bg3:      #ffffff;
+      --pk:       #e8829a;
+      --pk-deep:  #c45c75;
+      --pk-light: #f4b8c6;
+      --pk-pale:  #fde8ed;
+      --pk-glow:  rgba(232,130,154,0.15);
+      --border:   rgba(232,130,154,0.3);
+      --border2:  rgba(232,130,154,0.6);
+      --text:     #4a2533;
+      --text2:    #a0687a;
+      --text3:    #c9a0ad;
+    }
 
-  .progress-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; padding: 0 0.25rem; overflow-x: auto; }
-  .prog-dot { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
-  .prog-dot .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--color-border-secondary); transition: background 0.3s; }
-  .prog-dot.done .dot { background: #D4537E; }
-  .prog-dot.next .dot { background: #D4537E; box-shadow: 0 0 0 3px #FBEAF0; }
-  .prog-dot .dlabel { font-size: 10px; color: var(--color-text-tertiary); white-space: nowrap; }
-  .prog-dot.done .dlabel, .prog-dot.next .dlabel { color: #D4537E; }
-  .prog-line { flex: 1; height: 1px; background: var(--color-border-tertiary); min-width: 12px; }
-  .prog-line.done { background: #D4537E; }
+    body {
+      background: var(--bg);
+      font-family: 'Lato', sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
 
-  .milestone-grid { display: flex; flex-direction: column; gap: 10px; }
-  .m-card { border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); padding: 1rem 1.25rem; background: var(--color-background-primary); display: flex; align-items: center; gap: 14px; transition: border-color 0.2s; }
-  .m-card.past { opacity: 0.55; }
-  .m-card.next-up { border: 1.5px solid #D4537E; background: var(--color-background-primary); }
-  .m-badge { width: 42px; height: 42px; border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
-  .m-badge.pink { background: #FBEAF0; }
-  .m-badge.done-bg { background: var(--color-background-secondary); }
-  .m-info { flex: 1; min-width: 0; }
-  .m-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
-  .m-date { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
-  .m-right { text-align: right; flex-shrink: 0; }
-  .m-days-big { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
-  .m-days-big.pink { color: #D4537E; }
-  .m-days-label { font-size: 11px; color: var(--color-text-secondary); }
-  .m-done-tag { font-size: 11px; color: #3B6D11; background: #EAF3DE; padding: 3px 8px; border-radius: 20px; font-weight: 500; }
-  .live-row { display: flex; gap: 6px; margin-top: 6px; }
-  .live-unit { background: var(--color-background-secondary); border-radius: 6px; padding: 3px 7px; text-align: center; }
-  .live-num { font-size: 15px; font-weight: 500; color: #D4537E; display: block; line-height: 1.2; }
-  .live-lbl { font-size: 9px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; }
-  .next-label { font-size: 11px; color: #D4537E; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
-</style>
+    /* soft blobs */
+    .blob {
+      position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+      filter: blur(60px); opacity: 0.35;
+    }
+    .blob1 { width: 340px; height: 340px; background: #f9c5d1; top: -80px; right: -80px; }
+    .blob2 { width: 260px; height: 260px; background: #fad4de; bottom: 60px; left: -60px; }
+    .blob3 { width: 180px; height: 180px; background: #fce8ee; top: 45%; right: 10%; }
 
-<div class="wrap">
-  <h2 class="sr-only">Relationship milestones countdown from March 13, 2026</h2>
+    /* floating hearts */
+    .hearts-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .hrt {
+      position: absolute; opacity: 0.07; font-size: 14px;
+      animation: floatHeart linear infinite;
+      color: var(--pk);
+    }
+    @keyframes floatHeart {
+      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.07; }
+      90%  { opacity: 0.07; }
+      100% { transform: translateY(-10vh) rotate(30deg); opacity: 0; }
+    }
+
+    .page { position: relative; z-index: 1; padding: 2rem 1.5rem 6rem; max-width: 480px; margin: 0 auto; }
+
+    /* header */
+    .header { text-align: center; padding: 2.5rem 0 1.5rem; }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem; color: var(--pk-deep); letter-spacing: 0.04em;
+    }
+    .header p { font-size: 0.75rem; color: var(--text3); margin-top: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; }
+
+    /* divider */
+    .divider { display: flex; align-items: center; gap: 12px; margin: 1.75rem 0 1.25rem; }
+    .divider-line { flex: 1; height: 1px; background: var(--pk-light); }
+    .divider span { font-size: 0.65rem; color: var(--pk); letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; }
+
+    /* since bar */
+    .since-bar {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 1.25rem; padding: 1.1rem 1.25rem;
+      background: var(--bg3); border-radius: 18px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 20px rgba(232,130,154,0.1);
+    }
+    .since-heart { width: 40px; height: 40px; border-radius: 50%; background: var(--pk-pale); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .since-heart svg { width: 18px; height: 18px; fill: var(--pk); }
+    .since-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.12em; }
+    .since-val { font-size: 15px; font-weight: 500; color: var(--text); margin-top: 2px; }
+    .since-days { margin-left: auto; text-align: right; }
+    .since-days .big { font-size: 26px; font-weight: 600; color: var(--pk); font-family: 'Playfair Display', serif; }
+    .since-days .sml { font-size: 10px; color: var(--text3); }
+
+    /* progress */
+    .progress-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; overflow-x: auto; padding-bottom: 4px; }
+    .prog-dot { display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0; }
+    .prog-dot .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--bg2); border: 1.5px solid var(--pk-light); transition: all 0.3s; }
+    .prog-dot.done .dot { background: var(--pk); border-color: var(--pk); }
+    .prog-dot.next .dot { background: var(--pk); border-color: var(--pk); box-shadow: 0 0 0 4px var(--pk-glow); }
+    .prog-dot .dlabel { font-size: 10px; color: var(--text3); white-space: nowrap; }
+    .prog-dot.done .dlabel, .prog-dot.next .dlabel { color: var(--pk-deep); }
+    .prog-line { flex: 1; height: 1.5px; background: var(--pk-light); min-width: 14px; border-radius: 2px; }
+    .prog-line.done { background: var(--pk); }
+
+    /* milestone cards */
+    .milestone-grid { display: flex; flex-direction: column; gap: 10px; }
+    .m-card {
+      border-radius: 16px; border: 1px solid var(--border);
+      padding: 1rem 1.25rem; background: var(--bg3);
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 2px 12px rgba(232,130,154,0.07);
+    }
+    .m-card.past { opacity: 0.5; }
+    .m-card.next-up {
+      border: 1.5px solid var(--pk);
+      background: linear-gradient(135deg, #fff5f7 0%, #ffffff 100%);
+      box-shadow: 0 4px 24px rgba(232,130,154,0.18);
+    }
+    .m-badge { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 20px; }
+    .m-badge.pink { background: var(--pk-pale); border: 1px solid var(--border); }
+    .m-badge.done-bg { background: var(--bg2); border: 1px solid var(--border); }
+    .m-info { flex: 1; min-width: 0; }
+    .m-title { font-size: 14px; font-weight: 500; color: var(--text); }
+    .m-date { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .m-right { text-align: right; flex-shrink: 0; }
+    .m-days-big { font-size: 20px; font-weight: 500; color: var(--text3); font-family: 'Playfair Display', serif; }
+    .m-days-label { font-size: 10px; color: var(--text3); }
+    .m-done-tag { font-size: 11px; color: var(--pk-deep); background: var(--pk-pale); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; font-weight: 500; }
+    .live-row { display: flex; gap: 5px; }
+    .live-unit { background: var(--pk-pale); border: 1px solid var(--border); border-radius: 8px; padding: 5px 8px; text-align: center; }
+    .live-num { font-size: 15px; font-weight: 600; color: var(--pk-deep); display: block; line-height: 1.2; font-family: 'Playfair Display', serif; }
+    .live-lbl { font-size: 8px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; }
+    .next-label { font-size: 10px; color: var(--pk); font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+
+    /* easter egg */
+    .easter-heart { position: fixed; bottom: 22px; right: 22px; width: 20px; height: 20px; cursor: pointer; opacity: 0.1; z-index: 50; user-select: none; -webkit-tap-highlight-color: transparent; }
+    .easter-heart svg { width: 100%; height: 100%; fill: var(--pk); }
+
+    /* secret */
+    .secret-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(255,230,235,0.92); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+    .secret-overlay.open { opacity: 1; pointer-events: all; }
+    .secret-letter {
+      max-width: min(340px,90vw);
+      background: #fff;
+      border: 1px solid var(--border2); border-radius: 20px;
+      padding: 2.5rem 2rem; text-align: center;
+      transform: scale(0.5) rotate(5deg);
+      transition: transform 0.7s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 20px 60px rgba(232,130,154,0.3);
+    }
+    .secret-overlay.open .secret-letter { transform: scale(1) rotate(-0.5deg); }
+    .secret-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--pk-deep); margin-bottom: 1rem; }
+    .secret-body { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.92rem; color: var(--text); line-height: 1.8; }
+    .secret-close { display: inline-block; margin-top: 1.5rem; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--pk); cursor: pointer; border-bottom: 1px solid var(--pk-light); }
+
+    @keyframes ripple { from{transform:scale(1);opacity:0.5} to{transform:scale(2.5);opacity:0} }
+    .ripple-ring { position: fixed; border-radius: 50%; border: 1.5px solid var(--pk); pointer-events: none; z-index: 49; animation: ripple 0.6s ease-out forwards; }
+  </style>
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+<div class="hearts-bg" id="hearts-bg"></div>
+
+<div class="page">
+  <div class="header">
+    <h1>for you ♡</h1>
+    <p>us, in numbers</p>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><span>our milestones</span><div class="divider-line"></div></div>
 
   <div class="since-bar">
     <div class="since-heart">
@@ -61,111 +182,106 @@
   </div>
 
   <div class="progress-row" id="prog-row"></div>
-
   <div class="milestone-grid" id="milestone-grid"></div>
 </div>
 
+<div class="secret-overlay" id="secret-overlay">
+  <div class="secret-letter">
+    <div style="font-size:2rem;margin-bottom:0.8rem;">🌸</div>
+    <div class="secret-title">you found it.</div>
+    <div class="secret-body">
+      i hid this here just for you.<br><br>
+      because i knew you'd look.<br>
+      because that's exactly who you are.<br><br>
+      i love the way your brain works.<br>
+      i love <em>you</em>.
+    </div>
+    <div class="secret-close" id="secret-close">close this</div>
+  </div>
+</div>
+
+<div class="easter-heart" id="easter-heart">
+  <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+</div>
+
 <script>
-const START = new Date('2026-03-13T00:00:00');
+/* floating hearts bg */
+const hb = document.getElementById('hearts-bg');
+for(let i=0;i<18;i++){
+  const h=document.createElement('div'); h.className='hrt'; h.textContent='♡';
+  h.style.cssText=`left:${Math.random()*100}%;font-size:${10+Math.random()*14}px;animation-duration:${12+Math.random()*16}s;animation-delay:${Math.random()*14}s;`;
+  hb.appendChild(h);
+}
 
-const milestones = [
-  { label: '2 months', short: '2m', date: new Date('2026-05-13T00:00:00'), emoji: '2' },
-  { label: '3 months', short: '3m', date: new Date('2026-06-13T00:00:00'), emoji: '3' },
-  { label: '6 months', short: '6m', date: new Date('2026-09-13T00:00:00'), emoji: '6' },
-  { label: '1 year',   short: '1yr', date: new Date('2027-03-13T00:00:00'), emoji: '1' },
-  { label: '2 years',  short: '2yr', date: new Date('2028-03-13T00:00:00'), emoji: '2' },
+const START=new Date('2026-03-13T00:00:00');
+const milestones=[
+  {label:'2 months', short:'2m',  date:new Date('2026-05-13T00:00:00')},
+  {label:'3 months', short:'3m',  date:new Date('2026-06-13T00:00:00')},
+  {label:'6 months', short:'6m',  date:new Date('2026-09-13T00:00:00')},
+  {label:'1 year',   short:'1yr', date:new Date('2027-03-13T00:00:00')},
+  {label:'2 years',  short:'2yr', date:new Date('2028-03-13T00:00:00')},
 ];
+const emojis=['🌷','🌸','💐','🎀','♾️'];
 
-const emojis = ['🌷','🌙','✨','💌','🎂'];
-
-function pad(n){ return String(n).padStart(2,'0'); }
-function fmtDate(d){ return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); }
+function pad(n){return String(n).padStart(2,'0');}
+function fmtDate(d){return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});}
 
 function render(){
-  const now = new Date();
-  const daysSince = Math.floor((now - START) / 86400000);
-  document.getElementById('days-since').textContent = daysSince < 0 ? 0 : daysSince;
-
-  let nextIdx = milestones.findIndex(m => now < m.date);
-
-  const progRow = document.getElementById('prog-row');
-  progRow.innerHTML = '';
-  milestones.forEach((m, i) => {
-    const isPast = now >= m.date;
-    const isNext = i === nextIdx;
-    const dot = document.createElement('div');
-    dot.className = 'prog-dot' + (isPast ? ' done' : isNext ? ' next' : '');
-    dot.innerHTML = `<div class="dot"></div><div class="dlabel">${m.short}</div>`;
-    progRow.appendChild(dot);
-    if(i < milestones.length - 1){
-      const line = document.createElement('div');
-      line.className = 'prog-line' + (isPast ? ' done' : '');
-      progRow.appendChild(line);
-    }
+  const now=new Date();
+  document.getElementById('days-since').textContent=Math.max(0,Math.floor((now-START)/86400000));
+  const ni=milestones.findIndex(m=>now<m.date);
+  const pr=document.getElementById('prog-row'); pr.innerHTML='';
+  milestones.forEach((m,i)=>{
+    const isPast=now>=m.date,isNext=i===ni;
+    const d=document.createElement('div');
+    d.className='prog-dot'+(isPast?' done':isNext?' next':'');
+    d.innerHTML=`<div class="dot"></div><div class="dlabel">${m.short}</div>`;
+    pr.appendChild(d);
+    if(i<milestones.length-1){const l=document.createElement('div');l.className='prog-line'+(isPast?' done':'');pr.appendChild(l);}
   });
-
-  const grid = document.getElementById('milestone-grid');
-  grid.innerHTML = '';
-  milestones.forEach((m, i) => {
-    const isPast = now >= m.date;
-    const isNext = i === nextIdx;
-    const diff = m.date - now;
-    const days = Math.floor(diff / 86400000);
-    const hrs  = Math.floor((diff % 86400000) / 3600000);
-    const mins = Math.floor((diff % 3600000) / 60000);
-    const secs = Math.floor((diff % 60000) / 1000);
-
-    const card = document.createElement('div');
-    card.className = 'm-card' + (isPast ? ' past' : isNext ? ' next-up' : '');
-    card.id = 'card-' + i;
-
-    let rightHTML = '';
-    if(isPast){
-      rightHTML = `<div class="m-done-tag">celebrated</div>`;
-    } else if(isNext){
-      rightHTML = `
-        <div class="live-row" id="live-${i}">
-          <div class="live-unit"><span class="live-num" id="ld">${pad(days)}</span><span class="live-lbl">days</span></div>
-          <div class="live-unit"><span class="live-num" id="lh">${pad(hrs)}</span><span class="live-lbl">hrs</span></div>
-          <div class="live-unit"><span class="live-num" id="lm">${pad(mins)}</span><span class="live-lbl">min</span></div>
-          <div class="live-unit"><span class="live-num" id="ls">${pad(secs)}</span><span class="live-lbl">sec</span></div>
-        </div>`;
-    } else {
-      rightHTML = `<div class="m-days-big">${days}</div><div class="m-days-label">days away</div>`;
-    }
-
-    card.innerHTML = `
-      <div class="m-badge ${isPast ? 'done-bg' : 'pink'}">${emojis[i]}</div>
-      <div class="m-info">
-        ${isNext ? '<div class="next-label">up next</div>' : ''}
-        <div class="m-title">${m.label}</div>
-        <div class="m-date">${fmtDate(m.date)}</div>
-      </div>
-      <div class="m-right">${rightHTML}</div>`;
+  const grid=document.getElementById('milestone-grid'); grid.innerHTML='';
+  milestones.forEach((m,i)=>{
+    const isPast=now>=m.date,isNext=i===ni;
+    const diff=m.date-now;
+    const days=Math.floor(diff/86400000),hrs=Math.floor((diff%86400000)/3600000),mins=Math.floor((diff%3600000)/60000),secs=Math.floor((diff%60000)/1000);
+    const card=document.createElement('div');
+    card.className='m-card'+(isPast?' past':isNext?' next-up':''); card.id='card-'+i;
+    let right='';
+    if(isPast) right=`<div class="m-done-tag">celebrated ♡</div>`;
+    else if(isNext) right=`<div class="live-row"><div class="live-unit"><span class="live-num" id="ld">${pad(days)}</span><span class="live-lbl">days</span></div><div class="live-unit"><span class="live-num" id="lh">${pad(hrs)}</span><span class="live-lbl">hrs</span></div><div class="live-unit"><span class="live-num" id="lm">${pad(mins)}</span><span class="live-lbl">min</span></div><div class="live-unit"><span class="live-num" id="ls">${pad(secs)}</span><span class="live-lbl">sec</span></div></div>`;
+    else right=`<div class="m-days-big">${days}</div><div class="m-days-label">days away</div>`;
+    card.innerHTML=`<div class="m-badge ${isPast?'done-bg':'pink'}">${emojis[i]}</div><div class="m-info">${isNext?'<div class="next-label">up next ♡</div>':''}<div class="m-title">${m.label}</div><div class="m-date">${fmtDate(m.date)}</div></div><div class="m-right">${right}</div>`;
     grid.appendChild(card);
   });
 }
-
 render();
 
 setInterval(()=>{
-  const now = new Date();
-  const nextIdx = milestones.findIndex(m => now < m.date);
-  if(nextIdx === -1) return;
-  const m = milestones[nextIdx];
-  const diff = m.date - now;
-  if(diff <= 0){ render(); return; }
-  const card = document.getElementById('card-' + nextIdx);
-  if(!card) return;
-  const ld = card.querySelector('#ld');
-  const lh = card.querySelector('#lh');
-  const lm = card.querySelector('#lm');
-  const ls = card.querySelector('#ls');
-  if(ld) ld.textContent = pad(Math.floor(diff/86400000));
-  if(lh) lh.textContent = pad(Math.floor((diff%86400000)/3600000));
-  if(lm) lm.textContent = pad(Math.floor((diff%3600000)/60000));
-  if(ls) ls.textContent = pad(Math.floor((diff%60000)/1000));
+  const now=new Date();
+  const ni=milestones.findIndex(m=>now<m.date);
+  if(ni===-1)return;
+  const diff=milestones[ni].date-now;
+  if(diff<=0){render();return;}
+  const card=document.getElementById('card-'+ni); if(!card)return;
+  const ld=card.querySelector('#ld'),lh=card.querySelector('#lh'),lm=card.querySelector('#lm'),ls=card.querySelector('#ls');
+  if(ld)ld.textContent=pad(Math.floor(diff/86400000));
+  if(lh)lh.textContent=pad(Math.floor((diff%86400000)/3600000));
+  if(lm)lm.textContent=pad(Math.floor((diff%3600000)/60000));
+  if(ls)ls.textContent=pad(Math.floor((diff%60000)/1000));
+  document.getElementById('days-since').textContent=Math.max(0,Math.floor((now-START)/86400000));
+},1000);
 
-  document.getElementById('days-since').textContent = Math.floor((now - START)/86400000);
-}, 1000);
+let taps=0,timer=null;
+document.getElementById('easter-heart').addEventListener('click',function(e){
+  taps++;
+  const r=document.createElement('div'); r.className='ripple-ring';
+  r.style.cssText=`width:20px;height:20px;left:${e.clientX-10}px;top:${e.clientY-10}px;`;
+  document.body.appendChild(r); setTimeout(()=>r.remove(),700);
+  if(taps>=3){taps=0;clearTimeout(timer);document.getElementById('secret-overlay').classList.add('open');return;}
+  clearTimeout(timer); timer=setTimeout(()=>{taps=0;},2000);
+});
+document.getElementById('secret-close').addEventListener('click',()=>document.getElementById('secret-overlay').classList.remove('open'));
+document.getElementById('secret-overlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 </script>
+</body>
+</html>
